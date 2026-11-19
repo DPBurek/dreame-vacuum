@@ -1,57 +1,61 @@
-<center>
-<div align="center">
+# Dreame Vacuum for Hubitat Elevation
 
-<hr>
-<a href="https://dreame-vacuum.tasshack.com/"><img alt="Dreame Vacuum" src="https://dreame-vacuum.tasshack.com/logo.svg" width=400></a>
-<hr>
+A Hubitat Elevation Groovy integration for **Dreame**, **MOVA**, and **Trouver** robot vacuums using the **Dreamehome Cloud API (HTTPS + MQTT)**.
 
-<a href="https://dreame-vacuum.tasshack.com/"><img alt="Dreame Vacuum" src="https://dreame-vacuum.tasshack.com/dvc.png" width=480 /></a>
-
-Complete app replacement with **Home Assistant** for **Dreame** robot vacuums.
-
-[![Version](https://img.shields.io/github/manifest-json/v/Tasshack/dreame-vacuum?filename=custom_components%2Fdreame_vacuum%2Fmanifest.json&color=18bcf2&label=Version&style=for-the-badge)](https://github.com/Tasshack/dreame-vacuum/releases)
-![Downloads](https://img.shields.io/github/downloads/Tasshack/dreame-vacuum/total?label=Downloads&style=for-the-badge&color=18bcf2)
-[![HACS](https://img.shields.io/badge/HACS-Default-orange.svg?logo=HomeAssistantCommunityStore&color=18bcf2&logoColor=white&style=for-the-badge)](https://github.com/hacs/integration)
-[![Community Forum](https://img.shields.io/static/v1.svg?label=Community&message=Forum&color=18bcf2&logo=HomeAssistant&logoColor=white&style=for-the-badge)](https://community.home-assistant.io/t/custom-component-dreame-vacuum/473026)
-
-</div>
-</center>
-
-<hr>
+Ported from the Python Home Assistant integration [`Tasshack/dreame-vacuum`](https://github.com/Tasshack/dreame-vacuum).
 
 ## Features
 
-- Wide range of Dreame, MOVA, Mijia and Trouver robot vacuums and mops, configurable with a DreameHome, MovaHome, Xiaomi Home account or fully locally without the cloud
-- Almost every setting and state exposed dynamically as auto generated entities
-- Live and multi-floor map support with zone, spot and room cleaning
-- Per-room suction, water volume and cleaning order for customized cleaning
-- Persistent notifications and events for automations
-- Cleaning/cruising history, obstacle photos, map backup & recovery and saved WiFi maps
-- Backend translations for 40 languages
-- Complete interactive map editor via embedded [Dreame Vacuum Card](https://dreame-vacuum-card.tasshack.com/)
-<hr>
+- **Cloud Authentication & Auto-Refresh:** Supports Dreamehome, MovaHome, and Trouver accounts across `us`, `eu`, `cn`, `sg`, `ru`, `kr`, `in`, and `de` regions with automatic OAuth token refresh and request signing.
+- **Automatic Device Discovery:** Discovers all vacuums bound to your account and creates managed child devices.
+- **Real-Time MQTT Push + Scheduled HTTP Polling:** Uses Hubitat's `interfaces.mqtt` for instant property updates, with automatic fallback to scheduled HTTP polling.
+- **Core Controls:**
+  - `start` / `on`, `pause`, `stop`, `returnToBase` / `off`, `locate`
+  - `cleanRooms(roomIds, repeats, suctionLevel, waterVolume)` — clean one or more rooms by segment ID
+  - `cleanZone(coordinates, repeats)` — zone cleaning (`x1,y1,x2,y2`)
+  - `setSuctionLevel` (`Quiet`, `Standard`, `Strong`, `Turbo`)
+  - `setWaterVolume` (`Low`, `Medium`, `High`)
+  - `setCleaningMode` (`Sweeping`, `Mopping`, `Sweeping and Mopping`, `Mopping after Sweeping`)
+  - `setWetnessLevel` (1–32 for supported models)
+  - Base station controls: `startAutoEmpty`, `startWashing`, `pauseWashing`, `startDrying`, `stopDrying`
+  - Settings & maintenance: `setDnd`, `setChildLock`, `setVolume`, `resetConsumable`
+- **Telemetry & Consumables:**
+  - Battery, charging status, cleaning state/status/task status, error code & description
+  - Cleaning time, cleaned area, progress %, lifetime totals
+  - Consumable life percentages & hours (main brush, side brush, filter, sensor, mop pad, silver ion, detergent) plus Hubitat `Consumable` capability summary
+  - Base station tank/dust bag status attributes
 
-## [Documentation](https://dreame-vacuum.tasshack.com/)
+> **Note on Hubitat Platform Scope:** Live map rendering (`Pillow`/`numpy` camera entities) and local UDP MiIO encryption from the Home Assistant integration are omitted due to Hubitat's Groovy sandbox constraints.
 
-- [Installation](https://dreame-vacuum.tasshack.com/installation) - Minimum Home Assistant version and hardware requirements, with [HACS](https://dreame-vacuum.tasshack.com/installation/hacs) and [manual](https://dreame-vacuum.tasshack.com/installation/manually) setup steps
-- [Configuration](https://dreame-vacuum.tasshack.com/configuration) - Adding the device with a [Dreamehome](https://dreame-vacuum.tasshack.com/configuration/dreamehome), [Xiaomi Home](https://dreame-vacuum.tasshack.com/configuration/xiaomihome), [MOVAhome](https://dreame-vacuum.tasshack.com/configuration/movahome) or [TROUVER](https://dreame-vacuum.tasshack.com/configuration/trouver) account, or [locally](https://dreame-vacuum.tasshack.com/configuration/local) over the LAN
-- [Configuration Options](https://dreame-vacuum.tasshack.com/configuration-options) - Per device settings offered during setup and from the Configure button
-- [Supported Devices](https://dreame-vacuum.tasshack.com/guide/more/supported-devices) - Model codes of every tested [Dreame](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#dreame), [MOVA](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#mova), [Mijia](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#mijia) and [TROUVER](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#trouver) robot with the features it exposes
-- [How to Use](https://dreame-vacuum.tasshack.com/guide) - How entities, services and events come together on a dashboard
-- [Dashboard](https://dreame-vacuum.tasshack.com/guide/dashboard) - Setup examples and YAML templates for every supported Lovelace card, including the built-in **[Dreame Vacuum Card](https://dvc.tasshack.com/)**
-- [Entities](https://dreame-vacuum.tasshack.com/guide/entities) - What gets generated for a device, with [map](https://dreame-vacuum.tasshack.com/guide/entities/map-entities), [room](https://dreame-vacuum.tasshack.com/guide/entities/room-entities) and [consumable](https://dreame-vacuum.tasshack.com/guide/entities/consumable-entities) entities covered separately
-- [Map Support](https://dreame-vacuum.tasshack.com/guide/map-support) - How map data is decoded and rendered, with [history](https://dreame-vacuum.tasshack.com/guide/map-support/history), [recovery](https://dreame-vacuum.tasshack.com/guide/map-support/recovery), [obstacle photos](https://dreame-vacuum.tasshack.com/guide/map-support/obstacles) and [WiFi maps](https://dreame-vacuum.tasshack.com/guide/map-support/wifi-map)
-- [Services](https://dreame-vacuum.tasshack.com/guide/services) - Parameters and automation examples for [device](https://dreame-vacuum.tasshack.com/guide/services/vacuum-services) and [map](https://dreame-vacuum.tasshack.com/guide/services/map-services) control
-- [Notifications](https://dreame-vacuum.tasshack.com/guide/notifications) - Which device events raise a persistent notification and how to turn them off
-- [Events](https://dreame-vacuum.tasshack.com/guide/events) - Event types fired on the bus and the payloads they carry
-- [FAQ](https://dreame-vacuum.tasshack.com/guide/more/faq) - Recurring questions from the issue tracker and their actual causes
+## Installation
 
-<hr>
+### Option 1: Manual Install
 
-## Thanks To
+1. **Install the Driver:**
+   - In Hubitat, go to **Drivers Code** → **+ New Driver**.
+   - Paste or import [`drivers/dreame-vacuum-driver.groovy`](drivers/dreame-vacuum-driver.groovy) and click **Save**.
+2. **Install the App:**
+   - Go to **Apps Code** → **+ New App**.
+   - Paste or import [`apps/dreame-vacuum-manager.groovy`](apps/dreame-vacuum-manager.groovy) and click **Save**.
+3. **Add & Configure the App:**
+   - Go to **Apps** → **+ Add User App** → **Dreamehome Vacuum Manager**.
+   - Select your **App Ecosystem** (Dreamehome / MovaHome / Trouver) and **Server Region**, and enter your account email/phone and password.
+   - Click **Authenticate & Discover Vacuums**.
+   - Select your vacuum(s), choose your preferred polling interval, and click **Done**.
 
- - [xiaomi_vacuum](https://github.com/pooyashahidi/xiaomi_vacuum) by [@pooyashahidi](https://github.com/pooyashahidi)
- - [Xiaomi MIoT for Home Assistant](https://github.com/ha0y/xiaomi_miot_raw) by [@ha0y](https://github.com/ha0y)
- - [Xiaomi Cloud Map Extractor](https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor) by [@PiotrMachowski](https://github.com/PiotrMachowski)
- - Dreame cloud authentication by [@kuudori](https://github.com/kuudori)
- - Mova cloud support by [@r1si](https://github.com/r1si)
+### Option 2: Hubitat Package Manager (HPM)
+
+In HPM, choose **Install** → **From a URL** and enter:
+```
+https://raw.githubusercontent.com/DPBurek/dreame-vacuum/master/packageManifest.json
+```
+
+## Using `cleanRooms`
+
+Pass comma-separated integer room/segment IDs to `cleanRooms` (e.g., `1,3`):
+- In **Rule Machine**, use **Run Custom Action** → **Actuator** → select your vacuum → `cleanRooms` with string parameter `"1,3"` (and optional numeric `repeats` and enum `suctionLevel` / `waterVolume`).
+- Room IDs are integer segment IDs assigned by your vacuum's saved map (typically `1`, `2`, `3`, ...).
+
+## Credits
+
+Protocol reverse-engineering, MIoT property/action mappings, and state enums are ported from [`Tasshack/dreame-vacuum`](https://github.com/Tasshack/dreame-vacuum).

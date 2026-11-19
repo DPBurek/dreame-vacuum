@@ -1,0 +1,29 @@
+{
+  "packageName": "Dreamehome Vacuum Integration",
+  "author": "DPBurek",
+  "version": "1.0.0",
+  "minimumHEVersion": "2.3.0",
+  "dateReleased": "2026-11-18",
+  "documentationLink": "https://github.com/DPBurek/dreame-vacuum/blob/master/README.md",
+  "releaseNotes": "Initial Hubitat Elevation Groovy port of Tasshack/dreame-vacuum supporting Dreamehome, MovaHome, and Trouver Cloud (HTTPS + MQTT).",
+  "apps": [
+    {
+      "id": "a7f3c8e1-4b2d-4e91-8f5a-1c3d5e7f9a01",
+      "name": "Dreamehome Vacuum Manager",
+      "namespace": "dpburek",
+      "location": "https://raw.githubusercontent.com/DPBurek/dreame-vacuum/master/apps/dreame-vacuum-manager.groovy",
+      "required": true,
+      "oauth": false,
+      "primary": true
+    }
+  ],
+  "drivers": [
+    {
+      "id": "b8e4d9f2-5c3e-4f02-9a6b-2d4e6f8a0b02",
+      "name": "Dreamehome Vacuum",
+      "namespace": "dpburek",
+      "location": "https://raw.githubusercontent.com/DPBurek/dreame-vacuum/master/drivers/dreame-vacuum-driver.groovy",
+      "required": true
+    }
+  ]
+}
